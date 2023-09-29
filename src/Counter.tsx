@@ -1,68 +1,49 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
+import Newmodal from "./Newmodal";
 
 const Counter: React.FC = () => {
-  const [show, setShow] = useState<boolean>(false);
+  const [openModal, setOpenModal] = useState<boolean>(false);
   const [counter, setCounter] = useState<number>(0);
   const [id, setId] = useState<number | NodeJS.Timer>();
-  const [check, setCheck] = useState<boolean>(true);
-  const [check2, setCheck2] = useState<boolean>(false);
+  const [startButton, setStartButton] = useState<boolean>(true);
+  const [stopButton, setStopButton] = useState<boolean>(false);
 
   const start = () => {
     const intervalId = setInterval(() => {
       setCounter((prevCounter) => prevCounter + 1);
     }, 1000);
     setId(intervalId);
-    setCheck(!check);
-    setCheck2(!check2);
+    setStartButton(!startButton);
+    setStopButton(!stopButton);
   };
   const stop = () => {
     console.log(id);
     clearInterval(id);
-    setCheck(!check);
-    setCheck2(!check2);
+    setStartButton(!startButton);
+    setStopButton(!stopButton);
   };
+
   return (
-    <div className="con">
+    <div className="wrapper">
       <div className="modal-btn">
         <Button
           variant="primary"
-          onClick={() => setShow(true)}
+          onClick={() => setOpenModal(true)}
           className="btn-grad"
         >
           Counter Modal
         </Button>
       </div>
-      <Modal show={show} onHide={() => setShow(false)}>
-        <Modal.Header>
-          <Modal.Title>COUNTER</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>{counter}</Modal.Body>
-        <Modal.Footer>
-          <Button
-            variant="secondary"
-            className="btn-grad1"
-            onClick={() => setShow(false)}
-          >
-            CLOSE
-          </Button>
-          <Button
-            variant="primary"
-            className={check ? "btn-grad1" : "btn-grad2"}
-            onClick={start}
-          >
-            START
-          </Button>
-          <Button
-            variant="primary"
-            className={check2 ? "btn-grad1" : "btn-grad2"}
-            onClick={stop}
-          >
-            STOP
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <Newmodal
+        openModal={openModal}
+        onHide={() => setOpenModal(false)}
+        counter={counter}
+        onStart={start}
+        onStop={stop}
+        startButton={startButton}
+        stopButton={stopButton}
+      />
     </div>
   );
 };
